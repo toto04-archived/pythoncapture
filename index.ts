@@ -1,16 +1,10 @@
-import { PythonShell } from 'python-shell'
-import { spawn } from 'child_process'
-// let grabber = spawn('python3', {argv0: 'grab.py 18 30'})
-let grabber = new PythonShell('grab.py', { args: ['18', '30'] })
+import { Grabber } from './grabber'
+import { createSocket } from 'dgram'
 
-let counter = 0
+let client = createSocket('udp4')
+let grabber = new Grabber(10, 18)
 
-grabber.stdout.on('data', () => {
-    console.timeEnd(counter + '')
-})
-
-setInterval(() => {
-    console.log('sending attempt ' + counter++)
-    grabber.send('')
-    console.time(counter + '')
-}, 2000)
+setInterval(async () => {
+    let buf = await grabber.grab()
+    client.send(buf, 4210, '192.168.1.22')
+}, 200)

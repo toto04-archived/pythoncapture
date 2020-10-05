@@ -16,7 +16,6 @@ distance = 8
 
 while 1:
     input()
-    os.system('say hi')
     image = ImageGrab.grab()
     for n in range(0, nV):
         red = 0
@@ -66,5 +65,10 @@ while 1:
         green //= ops
         blue //= ops
         colors[n + nV + nH] = [red, green, blue]
-    hexs = map(lambda color: ''.join(map(lambda x: hex(x)[2:], color)), colors)
-    print(','.join(hexs))
+
+    for i in range(0, len(colors)):
+        for j in range(0, len(colors[i])):
+            colors[i, j] = colors[i, j] ** 2 / 256
+    pixels = map(lambda color: ''.join(
+        map(lambda x: hex(x)[2:].zfill(2), color)), colors)
+    print(','.join(pixels))
